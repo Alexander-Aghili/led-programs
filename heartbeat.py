@@ -17,19 +17,7 @@ def lightAllPixelsColor(strip, color):
     for i in range(0, strip.numPixels()):
         strip.setPixelColor(i, color)
     strip.show()
-    
-def slowlyChangeBrightness(strip, maxBrightness, wait, increase):
-    brightness = 0
-    for i in range(maxBrightness):
-        time.sleep(wait/1000)
-        if increase:
-            brightness = i
-        else:
-            brightness = maxBrightness - i
             
-        strip.setBrightness(brightness)
-        strip.show()
-        
 
 def colorWipe(strip, color, wait_ms=50, show=True):
     """Wipe color across display a pixel at a time."""
@@ -57,12 +45,22 @@ if __name__ == '__main__':
         print('Use "-c" argument to clear LEDs on exit')
 
     try:
-        strip.setBrightness(0)
+        i = 0
+        while i < 68:
+            i += 1
+            strip.setBrightness(i)
+            lightAllPixelsColor(strip, Color(255, 0, 0))
+            time.sleep(0.1)
+            lightAllPixelsColor(strip, Color(0, 0, 0))
+            time.sleep(.225)
+            lightAllPixelsColor(strip, Color(255, 0, 0))
+            time.sleep(0.1)
+            lightAllPixelsColor(strip, Color(0, 0, 0))
+            time.sleep(.575)
+        
         lightAllPixelsColor(strip, Color(127, 127, 127))
-        slowlyChangeBrightness(strip, 100, 100, True)
-        slowlyChangeBrightness(strip, 100, 100, False)
-        colorWipe(strip, Color(0,0,0), 10, False)
-        strip.show()
     except KeyboardInterrupt:
         if args.clear:
-            colorWipe(strip, Color(0,0,0), 10)
+            colorWipe(strip, Color(0,0,0), 10, False)
+            strip.show()
+    
